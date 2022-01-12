@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>個人情報管理画面</title>
+</head>
+<body class="text-center">
+	<div th:fragment="pass_contents">
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="page-header">
+					<h1>個人情報管理画面</h1>
+				</div>
+				<form method="post" th:action="@{/pass}" th:object="${signupForm}">
+					<label>旧パスワード</label>
+<!-- 					<input type="password"  th:field="*{beforpass}"><br /> -->
+        			<br />
+						<tr>
+							<th class="active col-sm-2">新パスワード</th>
+							<td class="col-sm-3">
+								<div class="form-group">
+									<input type="text" class="form-control" th:field="*{password}">
+								</div>
+							</td>
+						</tr>
+					<a class="btn btn-primary btn-lg pull-right" th:href="@{'/home'}">勤怠</a>
+				<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">更新</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

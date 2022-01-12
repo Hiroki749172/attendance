@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"><!-- タイムリーフの拡張ライブラリを使用する -->
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" rel="stylesheet">
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/home.css}" rel="stylesheet">
+<title>勤怠画面</title>
+</head>
+<body>
+	<!-- ===== ヘッダー（ナビゲーションバー） ===== -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">勤怠管理システム</a>
+			</div>
+			<form method="post" th:action="@{/logout}">
+				<button class="btn btn-link pull-right navbar-brand" type="submit">ログアウト</button>
+			</form>
+		</div>
+	</nav>
+	
+	<!-- ===== サイドバー ===== -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 sidebar">
+				<ul class="nav nav-pills nav-stacked">
+					<li role="presentation">
+						<a th:href="@{'/userList'}">社員管理</a>
+					</li>
+					<li class="nav nav-pills nav-stacked">
+						<a th:href="@{'/signup'}">社員登録</a>
+					</li>
+<!-- 					<li class="nav nav-pills nav-stacked"> -->
+<!-- 						<a th:each="user : ${userList}" th:href="@{'/pass/' + ${user.userId}}">マイページ</a> -->
+						
+<!-- 					</li> -->
+					<!-- 画面表示の認可
+						 sec:authorize属性を使うと権限を持っているユーザーのみhtmlタグが表示-->
+					<li role="presentation" sec:authorize="hasRole('ADMIN')">
+						<a th:href="@{'/admin'}">アドミン画面</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ===== コンテンツ ===== -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-10 col-sm-offset-2 main">
+				<!-- th:includeはテンプレートで必要。このタグ内に別ファイルの内容、つまりコンテンツ部分のHTMLが追加される
+					 コンテンツ部分を動的に変更するのでModelに登録された値を参照する（login/home :: home_contents）
+					 プリプロセッシングとは通常の式より先に評価される -->
+				<div th:include="__${contents}__"></div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

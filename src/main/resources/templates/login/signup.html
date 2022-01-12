@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!-- <link th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" rel="stylesheet"> -->
+<!-- <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script> -->
+<!-- <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script> -->
+<link rel="stylesheet" href="/css/signup.css">
+<title>SignUp</title>
+</head>
+<body>
+	<!-- コンテンツ部分 -->
+	<div th:fragment="signup_contents">
+		<div class="page-header">
+			<h1>社員登録画面</h1>
+		</div>
+		<!-- th:actionでリクエスト先のURLを指定。  
+			 th:objectでModelに登録されているオブジェクト(SignupFormクラス)を受け取る。 th:objectタグ内でth:fieldでオブジェクトを省略-->
+		<form method="post" th:action="@{/signup}" th:object="${signupForm}">
+			<table class="table table-bordered table-hover">
+				<!-- ユーザーIDの入力エリア -->
+				<tr>
+					<th class="active col-sm-3">ユーザーID</th>
+					<td>
+						<!-- th:classappend、CSSのclassを追加。Bootstrapのhas-errorでテキストボックスを赤くする
+						      "${#fielsds.hasErros('フィールド名')} ? 'has-error'"で判定し、falseの場合has-errorというclassが追加(trueの場合に最後まで実行)-->
+						<div class="form-group" th:classappend="${#fields.hasErrors('userId')} ? 'has-error'">
+							<!-- th:fieldでオブジェクトのフィールドを取得。同時にコントローラークラスに値を渡すこともできる -->
+							<input type="text" class="form-control" th:field="*{userId}">
+							<!-- th:ifは条件式を設定。trueの場合th:errorsでフィールドのエラーメッセージを表示 -->
+							<span class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">
+								userId error
+							</span>
+						</div>
+					</td>
+				</tr>
+				<!-- パスワードの入力エリア -->
+				<tr>
+					<th class="active">パスワード</th>
+					<td>
+						<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+							<input type="text" class="form-control" th:field="*{password}">
+							<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+								password error
+							</span>
+						</div>
+					</td>
+				</tr>
+				<!-- 氏名の入力エリア -->
+				<tr>
+					<th class="active">氏名</th>
+					<td>
+						<div class="form-group" th:classappend="${#fields.hasErrors('userName')} ? 'has-error'">
+							<input type="text" class="form-control" th:field="*{userName}">
+							<span class="text-danger" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">
+								userName error
+							</span>
+						</div>
+					</td>
+				</tr>
+				<!-- 管理者区分の入力エリア -->
+				<tr>
+					<th class="active">管理者区分</th>
+					<td>
+						<div class="form-group">
+							<!-- ラジオボタンの実装 -->
+							<!-- th:eachは拡張forのようなものでタグ内で繰り返される。Modelに登録されている値を変数名で取得できる -->
+							<div th:each="item : ${radioMaster}">
+								<!-- itemは変数名でSignupControllerクラスで取得したMapが入っている
+								     th:textには画面に表示される文字列を指定。MapのKeyの値（管理者、非管理者）
+								     th:valueには画面からControllerクラスに送る値を指定。Mapのvalue(true,false) -->
+								<input type="radio" name="radioMaster" 
+								th:text="${item.key}" th:value="${item.value}" th:field="*{master}">
+							</div>
+							<span class="text-danger" th:if="${#fields.hasErrors('master')}" th:errors="*{master}">
+								master error
+							</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<!-- エラーメッセージを一覧表示するには、th:each（５３参照）-->
+			<ul>
+                <li th:each="error : ${#fields.detailedErrors()}">
+                    <span th:text="${error.message}">Error message</span>
+                </li>
+            </ul> 
+			
+			<!-- 社員管理遷移ボタン、登録ボタン-->
+<!-- 			<a class="btn btn-primary" th:href="@{'/XXX'}">社員管理</a> -->
+			<button class="btn btn-primary" type="submit">登録</button>
+		</form>
+	</div>
+</body>
+</html>
