@@ -57,7 +57,7 @@ public class AdminConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/webjars/**").permitAll() //webjarsへアクセス許可
                 .antMatchers("/css/**").permitAll() //cssへアクセス許可
-//                .antMatchers("/login").permitAll() //ログインページは直リンクOK
+                .antMatchers("/login").permitAll() //ログインページは直リンクOK
                 .antMatchers("/signup").permitAll() //ユーザー登録画面は直リンクOK
                 .antMatchers("/adminlogin").permitAll() 
                 .antMatchers("/rest/**").permitAll()
