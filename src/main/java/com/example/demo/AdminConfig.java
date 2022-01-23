@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+
 @EnableWebSecurity //SecurityのConfigurationを有効にするにはAnnotationConfigWebApplicationContext で読み込むクラスを @EnableWebSecurity でアノテートする。
 @Configuration
 @Order(2)
@@ -61,7 +62,7 @@ public class AdminConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll() //ユーザー登録画面は直リンクOK
                 .antMatchers("/adminlogin").permitAll() 
                 .antMatchers("/rest/**").permitAll()
-                .antMatchers("/admin").hasAuthority("ROLE_ADMIN") //アドミンユーザーに許可
+                .antMatchers("/admin").hasAuthority("ROLE_GENERAL") //アドミンユーザーに許可
                 .anyRequest().authenticated(); //それ以外は直リンク禁止
 
         //ログイン処理
