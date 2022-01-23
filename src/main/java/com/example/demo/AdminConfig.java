@@ -16,8 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-
-@EnableWebSecurity //SecurityのConfigurationを有効にするにはAnnotationConfigWebApplicationContext で読み込むクラスを @EnableWebSecurity でアノテートする。
+//SecurityのConfigurationを有効にするにはAnnotationConfigWebApplicationContext で読み込むクラスを @EnableWebSecurity でアノテートする。
+@EnableWebSecurity 
 @Configuration
 @Order(2)
 public class AdminConfig extends WebSecurityConfigurerAdapter {
