@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.login.domain.model.LoginUser;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -26,6 +27,11 @@ public class UserService {
 	@Autowired
 	@Qualifier("UserDaoJdbcImpl")
 	UserDao dao;
+	
+	public LoginUser login(String userId) {
+		return dao.login(userId);
+	}
+	
 	//insertOneメソッドを呼び出し、戻り値が0より大きければ、insertが成功したという判定結果をreturnしている
 	//insert用メソッド
 	public boolean insert(User user) {

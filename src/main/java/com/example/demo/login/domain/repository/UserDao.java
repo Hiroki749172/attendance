@@ -4,9 +4,13 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import com.example.demo.login.domain.model.LoginUser;
 import com.example.demo.login.domain.model.User;
 
 public interface UserDao {
+	//
+	public LoginUser login(String userId) throws DataAccessException;
+	
 	//DataAccessExceptionとはSpringではDB操作で例外が発生した場合、Springが提供しているDataAccessExceptionを投げる
 	
 	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
@@ -60,7 +64,6 @@ public interface UserDao {
 	public List<User> selectManyFor() throws DataAccessException;
 	
 	public List<User> selectManyYear() throws DataAccessException;
-
 
 }
 

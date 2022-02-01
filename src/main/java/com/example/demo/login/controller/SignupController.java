@@ -87,7 +87,7 @@ public class SignupController {
 		
 		//ユーザー登録処理
 		boolean result = userService.insert(user);
-		boolean infor = userService.insertFor(user);
+//		boolean infor = userService.insertFor(user);
 //		model.addAttribute("infor", infor);s
 		
 		//ユーザー登録結果の判定

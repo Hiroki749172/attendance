@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.login.domain.model.LoginUser;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -264,7 +265,7 @@ public class UserDaoJdbcImpl implements UserDao {
 
 	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
 		@Override
-		public User selectHome(String userId) throws DataAccessException{
+		public User selectHome(String userName) throws DataAccessException{
 			Map<String, Object> map = jdbc.queryForMap(
 					"SELECT U.user_name, A.punch, A.attendance_date "
 					+ "FROM user_master U LEFT OUTER JOIN attendance_information A"
@@ -318,6 +319,19 @@ public class UserDaoJdbcImpl implements UserDao {
 					userList.add(user);
 				}
 		return userList;
+	}
+
+	@Override
+	public LoginUser login(String userId) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap(
+				"SELECT user_id, password, user_name "
+				+ " FROM user_master"
+				+ " WHERE user_id = ?", userId);
+		LoginUser login = new LoginUser();
+		login.setUserId((String) map.get("user_id"));
+		login.setPassword((String) map.get("password"));
+		login.setName((String)map.get("user_name"));
+		return login;
 	}
 
 }
