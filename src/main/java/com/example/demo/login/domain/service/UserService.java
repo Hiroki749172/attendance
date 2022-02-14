@@ -13,7 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.login.domain.model.LoginUser;
+import com.example.demo.login.domain.model.ChengePassword;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -28,13 +28,10 @@ public class UserService {
 	@Qualifier("UserDaoJdbcImpl")
 	UserDao dao;
 	
-	public LoginUser login(String userId) {
-		return dao.login(userId);
-	}
 	
 	//insertOneメソッドを呼び出し、戻り値が0より大きければ、insertが成功したという判定結果をreturnしている
 	//insert用メソッド
-	public boolean insert(User user) {
+	public boolean insertOne(User user) {
 		//insert実行
 		int rowNumber = dao.insertOne(user);
 		
@@ -156,15 +153,45 @@ public class UserService {
 		}
 		return result;
 	}
-	
-	public boolean insertAdmin(User user) {
-		int rowNumber = dao.insertAdmin(user);
+
+	public boolean updatePass(ChengePassword chenge, String userId) {
+		//1件更新
+		int rowNumber = dao.updatePass(chenge, userId);
+		
+		//判定用定数
 		boolean result = false;
-		if(rowNumber > 0) {
+		if(rowNumber > 0) { //0より大きい値が返ってきたらupdate成功
+			//update成功
 			result = true;
 		}
 		return result;
 	}
+	
+	public boolean updateStart(String userId) {
+		//1件更新
+		int rowNumber = dao.updateStart(userId);
+		
+		//判定用定数
+		boolean result = false;
+		if(rowNumber > 0) { //0より大きい値が返ってきたらupdate成功
+			//update成功
+			result = true;
+		}
+		return result;
+	}
+	public boolean updateEnd(String userId) {
+		//1件更新
+		int rowNumber = dao.updateEnd(userId);
+		
+		//判定用定数
+		boolean result = false;
+		if(rowNumber > 0) { //0より大きい値が返ってきたらupdate成功
+			//update成功
+			result = true;
+		}
+		return result;
+	}
+	
 	
 }
 

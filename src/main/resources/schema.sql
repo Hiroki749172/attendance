@@ -24,9 +24,8 @@ CREATE TABLE IF NOT EXISTS admin_history (
 CREATE TABLE IF NOT EXISTS attendance_information (
     user_id VARCHAR(50),
     punch INT,
-    attendance_date TIMESTAMP,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    year_month DATE,
-    PRIMARY KEY(user_id, punch, attendance_date)
+    attendance_date DATE,
+    start_time TIME,
+    end_time TIME,
+    PRIMARY KEY(user_id)
 );

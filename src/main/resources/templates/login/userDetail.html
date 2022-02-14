@@ -23,15 +23,15 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
+						<!--<tr>
 <!-- 							パスワード（入力不可） -->
-							<th class="active col-sm-2">パスワード</th>
+							<!-- <th class="active col-sm-2">パスワード</th>
 							<td class="col-sm-3">
 								<div class="form-group">
-									<input type="text" class="form-control" th:field="*{password}" readonly="readonly">
+									<input type="text" class="form-control" th:field="*{password}">
 								</div>
 							</td>
-						</tr>
+						</tr>-->
 						<tr>
 							<!-- 氏名 -->
 							<th class="active">氏名</th>
@@ -56,7 +56,12 @@
 						</tr>
 						
 					</table>
-					<input type="date" th:field="*{yearmonth}">
+					<ul>
+						<li th:each="error : ${#fields.detailedErrors()}">
+                    		<span th:text="${error.message}">Error message</span>
+                		</li>
+					</ul>
+					<input type="date">
 <!-- 					<a class="btn btn-primary btn-lg pull-right" th:href="@{'/pass/' + ${password}}">f</a> -->
 					<!-- 更新ボタン -->
 					<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">更新</button>

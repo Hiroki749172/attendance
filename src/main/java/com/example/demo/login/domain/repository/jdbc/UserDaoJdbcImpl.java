@@ -1,5 +1,6 @@
 package com.example.demo.login.domain.repository.jdbc;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.login.domain.model.LoginUser;
+import com.example.demo.login.domain.model.ChengePassword;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -23,7 +24,7 @@ public class UserDaoJdbcImpl implements UserDao {
 	
 	@Autowired
     PasswordEncoder passwordEncoder;
-	
+		
 	//user_masterテーブルの件数を取得
 	@Override
 	public int count() throws DataAccessException {
@@ -53,8 +54,7 @@ public class UserDaoJdbcImpl implements UserDao {
 				+ " password,"
 				+ " user_name,"
 				+ " master)"
-//				+ " role)"
-				+ " VALUES(?, ?, ?, ?)"; //, ?
+				+ " VALUES(?, ?, ?, ?)"; 
 				
 				//1件登録
 				int rowNumber =jdbc.update(sql
@@ -62,7 +62,11 @@ public class UserDaoJdbcImpl implements UserDao {
 				, password
 				, user.getUserName()
 				, user.getMaster());
-//				, user.getRole());
+				if(user.getMaster() == 1) {
+					updateAdmin(user);
+				}else {
+					updateGeneral(user);
+				}
 		return rowNumber;
 	}
 	
@@ -130,42 +134,74 @@ public class UserDaoJdbcImpl implements UserDao {
 	}
 	
 	@Override
-	public int updateRole(User user) throws DataAccessException {
-		String sql = "UPDATE USER_MASTER SET"
-				+ " role = ?"
-				+ "WHERE role = ?";
-		int rowNumber = jdbc.update(sql
-				, user.getRole()
-				, user.getRole());
+	public int updateAdmin(User user) throws DataAccessException {
+		String sql = "UPDATE user_master SET"
+				+ " role = 'ROLE_ADMIN'"
+				+ " WHERE user_id = ?";
+		int rowNumber = jdbc.update(sql, user.getUserId());
 		return rowNumber;
 	}
 	
+	@Override
+	public int updateGeneral(User user) throws DataAccessException {
+		String sql = "UPDATE user_master SET"
+				+ " role = 'ROLE_GENERAL'"
+				+ " WHERE user_id = ?";
+		int rowNumber = jdbc.update(sql, user.getUserId());
+		return rowNumber;
+	}
+	@Override
+	public int updateStart(String userId) throws DataAccessException{
+		int rowNumber = jdbc.update("UPDATE attendance_information SET punch = 1, start_time = CURRENT_TIME() WHERE user_id = ?", userId);
+		return rowNumber;
+	}
+	
+	@Override
+	public int updateEnd(String userId) throws DataAccessException{
+		String sql = "UPDATE attendance_information SET punch = 0, end_time = CURRENT_TIME() WHERE user_id = ?";
+		int rowNumber = jdbc.update(sql, userId);
+		return rowNumber;
+	}
 	//user_masterテーブルを1件更新
 	@Override
 	public int updateOne(User user) throws DataAccessException {
 		//パスワード暗号化
-				String password = passwordEncoder.encode(user.getPassword());
+//				String password = passwordEncoder.encode(user.getPassword());
 		
 		//insertの時と同様にupdate文を使用
 		//1件更新
 		String sql = "UPDATE USER_MASTER SET"
-				+ " password = ?,"
 				+ " user_name = ?,"
 				+ " master = ?"
 				+ " WHERE user_id = ?";
 		
 		//1件更新
 		int rowNumber = jdbc.update(sql
-				, password
 				, user.getUserName()
 				, user.getMaster()
 				, user.getUserId());
+		
 		if(user.getMaster() == 1) {
-			updateRole(user);
+			updateAdmin(user);
+		} else {
+			updateGeneral(user);
 		}
 		return rowNumber;
 	}
-	
+
+	@Override
+	public int updatePass(ChengePassword chenge, String userId) throws DataAccessException {
+		//パスワード暗号化
+		System.out.println(chenge.getPassword());
+		System.out.println(chenge.getBeforpass());
+		String password = passwordEncoder.encode(chenge.getPassword());
+		String beforpass = passwordEncoder.encode(chenge.getBeforpass());//password
+		System.out.println(beforpass);
+			String sql = "UPDATE USER_MASTER SET password = ? WHERE user_id = ?";
+			int rowNumber = jdbc.update(sql, password, userId);
+		return rowNumber;
+		
+	}
 	//user_masterテーブルを1件削除
 	@Override
 	public int deleteOne(String userId) throws DataAccessException {
@@ -203,18 +239,7 @@ public class UserDaoJdbcImpl implements UserDao {
 	}
 
 	//admin_historyテーブルにデータを1件insert
-	@Override
-	public int insertAdmin(User user) throws DataAccessException {
-		String sql = "INSERT INTO a(user_id,"
-				+ " ip_address,"
-				+ " login_time)"
-				+ " VALUES(?, ?, CURTIME())";
-		int rowNumber =jdbc.update(sql
-				, user.getUserId()
-				, user.getIpAddress());
-//				, user.getLoginTime());
-		return rowNumber;
-	}
+	
 	
 	//attendance_informationテーブルの件数を取得
 	@Override
@@ -230,16 +255,14 @@ public class UserDaoJdbcImpl implements UserDao {
 	@Override
 	public int insertFor(User user) throws DataAccessException {
 		String sql = "INSERT INTO attendance_information("
-				+ " user_id,"
-				+ " punch,"
-				+ " attendance_date)"
-				+ " VALUES(?, ?, CURTIME())";
+				+ " user_id, punch, start_time)"
+				+ " VALUES(?, 0, '00:00')";
 		
 		int rowNumber = jdbc.update(sql
-				, user.getUserId()
-				, user.getPunch());
+				, user.getUserId());
+//				, user.getPunch());
 //				, attendanceDate;
-//				, user.getStartTime()
+//				, user.getStartTime());
 //				, user.getEndTime());
 		
 		return rowNumber;
@@ -265,15 +288,18 @@ public class UserDaoJdbcImpl implements UserDao {
 
 	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
 		@Override
-		public User selectHome(String userName) throws DataAccessException{
+		public User selectHome(String userId) throws DataAccessException{
 			Map<String, Object> map = jdbc.queryForMap(
-					"SELECT U.user_name, A.punch, A.attendance_date "
-					+ "FROM user_master U LEFT OUTER JOIN attendance_information A"
-					+ "ON U.user_id = A.user_id");
+					"SELECT *"
+					+ " FROM user_master INNER JOIN attendance_information ON user_master.user_id = attendance_information.user_id"
+					+ " WHERE user_master.user_id = ?", userId);
 			User user = new User();
 			user.setUserName((String) map.get("user_name"));
 			user.setPunch((int) map.get("punch"));
 			user.setAttendanceDate((Date) map.get("attendance_date"));
+			user.setStartTime((Time) map.get("start_time"));
+			user.setEndTime((Time) map.get("end_time"));
+			System.out.println(user);
 			return user;
 		}
 	//attendance_informationテーブルの全データを取得
@@ -281,10 +307,11 @@ public class UserDaoJdbcImpl implements UserDao {
 	public List<User> selectManyFor() throws DataAccessException {
 		
 		List<Map<String, Object>> getList = jdbc.queryForList(
-				"SELECT U.user_id, U.user_name, U.master,"
-				+ " A.punch, A.attendance_date FROM"
-				+ " user_master U LEFT OUTER JOIN attendance_information A"
-				+ " ON U.user_id = A.user_id");
+				"SELECT user_master.user_id, user_master.user_name, user_master.master,"
+				+ " attendance_information.punch, attendance_information.attendance_date, "
+				+ "attendance_information.start_time, attendance_information.end_time, attendance_information.attendance_date FROM"
+				+ " user_master LEFT OUTER JOIN attendance_information"
+				+ " ON user_master.user_id = attendance_information.user_id");
 		List<User> userList = new ArrayList<>();
 		for(Map<String, Object> map : getList) {
 			User user = new User();
@@ -293,8 +320,8 @@ public class UserDaoJdbcImpl implements UserDao {
 			user.setMaster((int) map.get("master"));
 			user.setPunch((int) map.get("punch"));
 			user.setAttendanceDate((Date) map.get("attendance_date"));
-//			user.setStartTime((Timestamp) map.get("start_time"));
-//			user.setEndTime((Timestamp) map.get("end_time"));
+			user.setStartTime((Time) map.get("start_time"));
+			user.setEndTime((Time) map.get("end_time"));
 			userList.add(user);
 		}
 		return userList;
@@ -316,24 +343,11 @@ public class UserDaoJdbcImpl implements UserDao {
 					user.setMaster((int) map.get("master"));
 					user.setPunch((int) map.get("punch"));
 					user.setAttendanceDate((Date) map.get("attendance_date"));
+					user.setStartTime((Time) map.get("startTime"));
 					userList.add(user);
 				}
 		return userList;
 	}
-
-	@Override
-	public LoginUser login(String userId) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap(
-				"SELECT user_id, password, user_name "
-				+ " FROM user_master"
-				+ " WHERE user_id = ?", userId);
-		LoginUser login = new LoginUser();
-		login.setUserId((String) map.get("user_id"));
-		login.setPassword((String) map.get("password"));
-		login.setName((String)map.get("user_name"));
-		return login;
-	}
-
 }
 
 //UserDaoインターフェースを実装したクラス

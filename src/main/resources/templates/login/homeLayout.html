@@ -28,16 +28,18 @@
 		<div class="row">
 			<div class="col-sm-2 sidebar">
 				<ul class="nav nav-pills nav-stacked">
-					<li role="presentation">
+					<li role="presentation" sec:authorize="hasRole('ADMIN')">
 						<a th:href="@{'/userList'}">社員管理</a>
 					</li>
 					<li class="nav nav-pills nav-stacked">
 						<a th:href="@{'/signup'}">社員登録</a>
 					</li>
-<!-- 					<li class="nav nav-pills nav-stacked"> -->
-<!-- 						<a th:each="user : ${userList}" th:href="@{'/pass/' + ${user.userId}}">マイページ</a> -->
-						
-<!-- 					</li> -->
+					<li class="nav nav-pills nav-stacked"> 
+						<a th:href="@{'/pass'}">マイページ</a>
+					</li> 
+					<li class="nav nav-pills nav-stacked">
+						<a th:href="@{'/home'}">ホーム</a>
+					</li>
 					<!-- 画面表示の認可
 						 sec:authorize属性を使うと権限を持っているユーザーのみhtmlタグが表示-->
 					<li role="presentation" sec:authorize="hasRole('ADMIN')">

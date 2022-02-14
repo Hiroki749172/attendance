@@ -12,10 +12,16 @@
 				<div class="page-header">
 					<h1>個人情報管理画面</h1>
 				</div>
-				<form method="post" th:action="@{/pass}" th:object="${signupForm}">
-					<label>旧パスワード</label>
-<!-- 					<input type="password"  th:field="*{beforpass}"><br /> -->
-        			<br />
+				<form method="post" th:action="@{/pass}" th:object="${update}">
+					<table class="table table-bordered tale-hover">
+						<tr>
+							<th class="active col-sm-2">旧パスワード</th>
+							<td class="col-sm-3">
+								<div class="form-group">
+									<input type="text" class="form-control" th:field="*{beforpass}">
+								</div>
+							</td>
+						</tr>
 						<tr>
 							<th class="active col-sm-2">新パスワード</th>
 							<td class="col-sm-3">
@@ -24,8 +30,10 @@
 								</div>
 							</td>
 						</tr>
+					</table>
 					<a class="btn btn-primary btn-lg pull-right" th:href="@{'/home'}">勤怠</a>
 				<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">更新</button>
+				
 				</form>
 			</div>
 		</div>

@@ -82,13 +82,13 @@ public class SignupController {
 		user.setPassword(form.getPassword());
 		user.setUserName(form.getUserName());
 		user.setMaster(form.getMaster());
-		user.setYearmonth(form.getYearmonth());
+//		user.setYearmonth(form.getYearmonth());
 //		user.setRole(null);
 		
 		//ユーザー登録処理
-		boolean result = userService.insert(user);
-//		boolean infor = userService.insertFor(user);
-//		model.addAttribute("infor", infor);s
+		boolean result = userService.insertOne(user);
+		boolean infor = userService.insertFor(user);
+		model.addAttribute("infor", infor);
 		
 		//ユーザー登録結果の判定
 		if(result == true) {

@@ -59,7 +59,7 @@ public class AdminConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll() //ユーザー登録画面は直リンクOK
                 .antMatchers("/adminlogin").permitAll() 
                 .antMatchers("/rest/**").permitAll()
-                .antMatchers("/admin").hasAuthority("ROLE_GENERAL") //アドミンユーザーに許可
+                .antMatchers("/admin").hasAuthority("ROLE_ADMIN") //アドミンユーザーに許可
                 .anyRequest().authenticated(); //それ以外は直リンク禁止
 
         //ログイン処理
@@ -68,7 +68,7 @@ public class AdminConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/adminlogin") //ログイン処理のパス
                 .loginPage("/adminlogin") //ログインページの指定
                 .failureUrl("/adminlogin") //ログイン失敗時の遷移先
-                .usernameParameter("username") //ログインページのユーザーID
+                .usernameParameter("userId") //ログインページのユーザーID
                 .passwordParameter("password") //ログインページのパスワード
                 .defaultSuccessUrl("/home", true); //ログイン成功後の遷移先
 

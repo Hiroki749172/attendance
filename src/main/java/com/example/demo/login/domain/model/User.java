@@ -1,7 +1,6 @@
 package com.example.demo.login.domain.model;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -16,13 +15,15 @@ public class User {
 	private int master;
 	private String role;
 	
+	private String beforpass;
+	
 	private Integer ipAddress;
 	private Time loginTime;
 	
 	private int punch;
 	private Date attendanceDate;
-	private Timestamp startTime;
-	private Timestamp endTime;
+	private Time startTime;
+	private Time endTime;
 	private LocalDateTime nowDate = LocalDateTime.now();
 	
 	private Date yearmonth;

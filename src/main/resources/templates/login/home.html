@@ -11,21 +11,25 @@
 		<div class="page-header">
 			<h1>勤怠</h1>
 			</div>
-			<table class="table table-bordered table-hover table-striped">
-		        <tr>
-		            <th class="info col-sm-2">氏名</th>
-		            <th class="info col-sm-2">勤怠情報</th>
-		            <th class="info col-sm-2">勤怠情報詳細</th>
-		        </tr>
-<!-- 		        <tr th:each="home : ${userHome}"> -->
-<!-- 		        	<td th:text="${home.userName}"></td> -->
-<!-- 		            <td th:text="${home.punch} ? '出勤' : '退勤'"></td> -->
-<!-- 		            <td th:text="${#dates.format(home.attendanceDate, 'YYYY/MM/dd HH:mm:ss')}"></td> -->
-<!-- 		        </tr> -->
-		        
-		    </table>
-		    
-		
+			<form method="post" th:action="@{/home}">
+				<table class="table table-bordered table-hover table-striped">
+			        <tr>
+			            <th class="info col-sm-2">氏名</th>
+			            <th class="info col-sm-2">勤怠情報</th>
+			            <th class="info col-sm-2">出勤時間</th>
+			            <th class="info col-sm-2">退勤時間</th>
+			        </tr>
+	 		        <tr th:each="home : ${userHome}"> 
+	 		        	<td th:text="${home.userName}"></td> 
+			            <td th:text="${home.punch} ? '出勤' : '退勤'"></td>
+			            <td th:text="${#dates.format(home.startTime, 'HH:mm')}"></td> 
+			            <td th:text="${#dates.format(home.endTime, 'HH:mm')}"></td>
+			        </tr> 
+			    </table>
+			
+		    <button class="btn btn-primary" type="submit" name="updateStart">出勤</button>
+		    <button class="btn btn-primary" type="submit" name="updateEnd">退勤</button>
+			</form>
 	</div>
 
 </body>

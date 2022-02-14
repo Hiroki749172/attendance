@@ -4,15 +4,14 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import com.example.demo.login.domain.model.LoginUser;
+import com.example.demo.login.domain.model.ChengePassword;
 import com.example.demo.login.domain.model.User;
 
 public interface UserDao {
-	//
-	public LoginUser login(String userId) throws DataAccessException;
-	
 	//DataAccessExceptionとはSpringではDB操作で例外が発生した場合、Springが提供しているDataAccessExceptionを投げる
-	
+	public int updateStart(String userId) throws DataAccessException;
+	public int updateEnd(String userId) throws DataAccessException;
+	public int updatePass(ChengePassword chenge, String userId) throws DataAccessException;
 	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
 	public User selectHome(String userId) throws DataAccessException;
 	
@@ -31,8 +30,9 @@ public interface UserDao {
 	//user_masterテーブルの全データを取得
 	public List<User> selectMany() throws DataAccessException;
 	
-	public int updateRole(User user) throws DataAccessException;
+	public int updateAdmin(User user) throws DataAccessException;
 	
+	public int updateGeneral(User user) throws DataAccessException;
 	//user_masterテーブルを1件更新
 	public int updateOne(User user) throws DataAccessException;
 	
@@ -46,10 +46,6 @@ public interface UserDao {
 	public int insertUser(User user) throws DataAccessException;
 	
 	//access_historyテーブルの全データを取得
-	
-	
-	//access_manageテーブルにデータを1件insert
-	public int insertAdmin(User user) throws DataAccessException;
 	
 	//attendance_informationテーブルの件数を取得
 	public int count4() throws DataAccessException;

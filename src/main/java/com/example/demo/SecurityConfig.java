@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     // ユーザーIDとパスワードを取得するSQL文
     private static final String USER_SQL = "SELECT"
             + " user_id, password, true"
@@ -66,7 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll() //ユーザー登録画面は直リンクOK
                 .antMatchers("/adminlogin").permitAll() 
                 .antMatchers("/rest/**").permitAll()
-                .antMatchers("/admin").hasAuthority("ROLE_GENERAL")
+                .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/userList").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated(); //それ以外は直リンク禁止
 
         //ログイン処理
@@ -101,16 +102,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery(USER_SQL)
                 .authoritiesByUsernameQuery(ROLE_SQL)
                 .passwordEncoder(passwordEncoder());
-       
-//    @Configuration
-//	protected static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
-//	    @Autowired
-//	    UserDetailsServiceImpl userDetailsService;
-//
-//	    @Override
-//	    public void init(AuthenticationManagerBuilder auth) throws Exception {
-//	        auth.userDetailsService(userDetailsService)
-//	            .passwordEncoder(new BCryptPasswordEncoder());
-//	    }
 	}
 }
