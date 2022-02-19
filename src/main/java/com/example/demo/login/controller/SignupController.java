@@ -38,10 +38,6 @@ public class SignupController {
 			return radio;
 		}
 	
-	/*localhost:8080/signup
-	 * GETメソッドでHTTPリクエストが来たら、signup.html
-	 * POSTメソッドでHTTPリクエストが来たら、loginにリダイレクトしLoginControllerのgetLogin)が呼ばれる*/
-	
 	//社員登録画面のGET用コントローラー
 	//Formクラスを受け取るために、引数のフォームクラス(SignupForm form)に@ModelAttributeを付けたらModelに(addAttribute)する
 	@GetMapping("/signup")
@@ -82,8 +78,6 @@ public class SignupController {
 		user.setPassword(form.getPassword());
 		user.setUserName(form.getUserName());
 		user.setMaster(form.getMaster());
-//		user.setYearmonth(form.getYearmonth());
-//		user.setRole(null);
 		
 		//ユーザー登録処理
 		boolean result = userService.insertOne(user);
@@ -96,9 +90,6 @@ public class SignupController {
 		} else {
 			System.out.println("insert失敗");
 		}
-		
-		//login.htmlにリダイレクト、遷移先のControllerクラスのメソッド(LoginControllerのgetLogin)が呼ばれる
-		//このソースでいうとlocalhost:8080/loginにGETメソッドでHTTPリクエストが送られる
 		return "redirect:/home";
 	}
 	
@@ -120,14 +111,12 @@ public class SignupController {
 		return "error";
 	}
 	
-	//
 	@ExceptionHandler(Exception.class)
 	public String exceptionHandler(Exception e, Model model) {
 		//例外クラスのメッセージをModelに登録
 		model.addAttribute("error", "内部サーバーエラー ： ExceptionHandler");
 		//例外クラスのメッセージをModelに登録
 		model.addAttribute("message", "SignupControllerでDataAccessExceptionが発生しました。");
-		
 		//HTTPのエラーコード(500)をModelに登録
 		model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR);
 		

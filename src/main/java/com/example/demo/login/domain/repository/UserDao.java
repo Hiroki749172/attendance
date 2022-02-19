@@ -1,5 +1,6 @@
 package com.example.demo.login.domain.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -59,7 +60,7 @@ public interface UserDao {
 	//attendance_informationテーブルの全データを取得
 	public List<User> selectManyFor() throws DataAccessException;
 	
-	public List<User> selectManyYear() throws DataAccessException;
+	public List<User> selectManyYear(Date date) throws DataAccessException;
 
 }
 

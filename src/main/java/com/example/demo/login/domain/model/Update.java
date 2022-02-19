@@ -19,14 +19,12 @@ public class Update {
 	
 	private Integer ipAddress;
 	private Time loginTime;
-	
+	private Date date;
 	private int punch;
 	private Date attendanceDate;
 	private Time startTime;
 	private Time endTime;
 	private LocalDateTime nowDate = LocalDateTime.now();
-	
-	private Date yearmonth;
 	
 	//groups属性にインターフェースのクラスを指定することで、フィールドとグループの紐づけができます
 	@NotBlank(groups=ValidationGroup1.class)

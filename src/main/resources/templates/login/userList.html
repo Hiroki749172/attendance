@@ -11,9 +11,10 @@
 		<div class="page-header">
 			<h1>社員管理</h1>
 		</div>
-<!-- 		<form method="post" th:action="@{/userList}" th:object="signupForm"> -->
+ 		<form method="post" th:action="@{/userList}">
 			<table class="table table-bordered table-hover table-striped">
 				<tr>
+					<th class="info col-sm-2">ユーザーID</th>
 					<th class="info col-sm-2">氏名</th>
 					<th class="info col-sm-2">管理者区分</th>
 					<th class="info col-sm-2">出退勤区分</th>
@@ -23,11 +24,12 @@
 					<th class="info col-sm-2"></th>
 				</tr>
 				<tr th:each="user : ${userList}">
+					<td th:text="${user.userId}"></td>
 					<td th:text="${user.userName}"></td>
 					<td th:text="${user.master} ? '管理者' : '非管理者'"></td>
 					<!-- 日付型のフォーマット -->
 					<td th:text="${user.punch} ? '出勤' : '退勤'"></td>
-					<td th:text="${#dates.format(user.attendanceDate, 'YYYY/MM/DD')}" ></td>
+					<td th:text="${#dates.format(user.attendanceDate, 'YYYY/MM/dd')}" ></td>
 					<td th:text="${#dates.format(user.startTime, 'HH:mm')}" ></td>
 					<td th:text="${#dates.format(user.endTime, 'HH:mm')}" ></td>
 					<!-- 動的URL この後でユーザー1件取得して表示する機能を追加します。
@@ -44,7 +46,9 @@
 			
 			<!-- CSV出力 -->
 			<a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
-<!-- 		</form> -->
+			<!--<input type="date" name="date" th:field="*{update.yearmonth}">-->
+			<button class="btn btn-primary" type="submit" name="selectDate">検索</button>
+ 		</form> 
 	</div>
 </body>
 </html>

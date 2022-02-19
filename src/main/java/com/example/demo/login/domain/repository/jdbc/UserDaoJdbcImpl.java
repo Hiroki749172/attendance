@@ -192,8 +192,6 @@ public class UserDaoJdbcImpl implements UserDao {
 	@Override
 	public int updatePass(ChengePassword chenge, String userId) throws DataAccessException {
 		//パスワード暗号化
-		System.out.println(chenge.getPassword());
-		System.out.println(chenge.getBeforpass());
 		String password = passwordEncoder.encode(chenge.getPassword());
 		String beforpass = passwordEncoder.encode(chenge.getBeforpass());//password
 		System.out.println(beforpass);
@@ -273,15 +271,15 @@ public class UserDaoJdbcImpl implements UserDao {
 	//attendance_informationテーブルのデータを１件取得
 	@Override
 	public User selectFor(String userId) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap("SELECT user_id, punch, attendance_date FROM attendance_information"
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM attendance_information"
 				+ " WHERE user_id = ?", userId);
 		User user = new User();
 		
 		user.setUserId((String) map.get("user_id"));
 		user.setPunch((int) map.get("punch"));
 		user.setAttendanceDate((Date) map.get("attendance_date"));
-//		user.setStartTime((Timestamp) map.get("start_time"));
-//		user.setEndTime((Timestamp) map.get("end_time"));
+		user.setStartTime((Time) map.get("start_time"));
+		user.setEndTime((Time) map.get("end_time"));
 		
 		return user;
 	}
@@ -294,6 +292,7 @@ public class UserDaoJdbcImpl implements UserDao {
 					+ " FROM user_master INNER JOIN attendance_information ON user_master.user_id = attendance_information.user_id"
 					+ " WHERE user_master.user_id = ?", userId);
 			User user = new User();
+			user.setUserId((String) map.get("user_id"));
 			user.setUserName((String) map.get("user_name"));
 			user.setPunch((int) map.get("punch"));
 			user.setAttendanceDate((Date) map.get("attendance_date"));
@@ -328,26 +327,23 @@ public class UserDaoJdbcImpl implements UserDao {
 	}
 
 	@Override
-	public List<User> selectManyYear() throws DataAccessException {
+	public List<User> selectManyYear(Date date) throws DataAccessException {
 		List<Map<String, Object>> getList = jdbc.queryForList(
-				"SELECT U.user_id, U.user_name, U.master,"
-						+ " A.punch, A.attendance_date FROM"
-						+ " user_master U LEFT OUTER JOIN attendance_information A"
-						+ " ON U.user_id = A.user_id"
-						+ " WHERE attendance < yearmonth");
+				"SELECT  punch, attendance_date, start_time, end_time FROM"
+						+ " attendance_information"
+						+ " ON user_id = user_id WHERE attendance_date = ?", date);
 				List<User> userList = new ArrayList<>();
 				for(Map<String, Object> map : getList) {
 					User user = new User();
-					user.setUserId((String) map.get("user_id"));
-					user.setUserName((String) map.get("user_name"));
-					user.setMaster((int) map.get("master"));
 					user.setPunch((int) map.get("punch"));
 					user.setAttendanceDate((Date) map.get("attendance_date"));
 					user.setStartTime((Time) map.get("startTime"));
+					user.setEndTime((Time)map.get("end_time"));
 					userList.add(user);
 				}
 		return userList;
 	}
+	
 }
 
 //UserDaoインターフェースを実装したクラス

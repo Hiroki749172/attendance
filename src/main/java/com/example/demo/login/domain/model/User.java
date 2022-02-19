@@ -22,11 +22,10 @@ public class User {
 	
 	private int punch;
 	private Date attendanceDate;
+	private Date date;
 	private Time startTime;
 	private Time endTime;
 	private LocalDateTime nowDate = LocalDateTime.now();
-	
-	private Date yearmonth;
 }
 
 

@@ -5,6 +5,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,11 @@ public class UserService {
 	public List<User> selectMany() {
 		//全件取得
 		return dao.selectMany();
+	}
+	
+	public List<User> selectManyYear(Date date) {
+		//全件取得
+		return dao.selectManyYear(date);
 	}
 	
 	//1件取得メソッド
