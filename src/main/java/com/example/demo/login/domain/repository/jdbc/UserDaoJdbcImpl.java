@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.login.domain.model.ChengePassword;
+import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -69,8 +70,6 @@ public class UserDaoJdbcImpl implements UserDao {
 				}
 		return rowNumber;
 	}
-	
-	
 	
 	//user_masterテーブルのデータを1件取得
 	@Override
@@ -165,9 +164,6 @@ public class UserDaoJdbcImpl implements UserDao {
 	//user_masterテーブルを1件更新
 	@Override
 	public int updateOne(User user) throws DataAccessException {
-		//パスワード暗号化
-//				String password = passwordEncoder.encode(user.getPassword());
-		
 		//insertの時と同様にupdate文を使用
 		//1件更新
 		String sql = "UPDATE USER_MASTER SET"
@@ -241,7 +237,7 @@ public class UserDaoJdbcImpl implements UserDao {
 	
 	//attendance_informationテーブルの件数を取得
 	@Override
-	public int count4() throws DataAccessException {
+	public int countAttenDance() throws DataAccessException {
 		int count4 = jdbc.queryForObject("SELECT COUNT(*) FROM attendance_information", Integer.class);
 		
 		return count4;
@@ -327,19 +323,19 @@ public class UserDaoJdbcImpl implements UserDao {
 	}
 
 	@Override
-	public List<User> selectManyYear(Date date) throws DataAccessException {
+	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException {
 		List<Map<String, Object>> getList = jdbc.queryForList(
-				"SELECT  punch, attendance_date, start_time, end_time FROM"
+				"SELECT punch, attendance_date, start_time, end_time FROM"
 						+ " attendance_information"
-						+ " ON user_id = user_id WHERE attendance_date = ?", date);
-				List<User> userList = new ArrayList<>();
+						+ " WHERE attendance_date = ? AND user_id = ?", date, userId);
+				List<SignupForm> userList = new ArrayList<>();
 				for(Map<String, Object> map : getList) {
-					User user = new User();
-					user.setPunch((int) map.get("punch"));
-					user.setAttendanceDate((Date) map.get("attendance_date"));
-					user.setStartTime((Time) map.get("startTime"));
-					user.setEndTime((Time)map.get("end_time"));
-					userList.add(user);
+					SignupForm form = new SignupForm();
+					form.setPunch((int) map.get("punch"));
+					form.setAttendanceDate((Date) map.get("attendance_date"));
+					form.setStartTime((Time) map.get("start_Time"));
+					form.setEndTime((Time)map.get("end_time"));
+					userList.add(form);
 				}
 		return userList;
 	}

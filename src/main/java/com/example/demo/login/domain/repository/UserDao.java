@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 
 import com.example.demo.login.domain.model.ChengePassword;
+import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
 
 public interface UserDao {
@@ -46,10 +47,8 @@ public interface UserDao {
 	//access_historyテーブルにデータを1件insert
 	public int insertUser(User user) throws DataAccessException;
 	
-	//access_historyテーブルの全データを取得
-	
 	//attendance_informationテーブルの件数を取得
-	public int count4() throws DataAccessException;
+	public int countAttenDance() throws DataAccessException;
 	
 	//attendance_informationテーブルにデータを1件insert
 	public int insertFor(User user)throws DataAccessException;
@@ -60,7 +59,7 @@ public interface UserDao {
 	//attendance_informationテーブルの全データを取得
 	public List<User> selectManyFor() throws DataAccessException;
 	
-	public List<User> selectManyYear(Date date) throws DataAccessException;
+	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException;
 
 }
 

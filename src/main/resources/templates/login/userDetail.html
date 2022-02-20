@@ -18,7 +18,7 @@
 							<!-- ユーザーID（入力不可） -->	
 							<th class="active col-sm-2">ユーザーID</th>
 							<td class="col-sm-3">
-								<divclass="form-group">
+								<div class="form-group">
 									<input type="text" class="form-control" th:field="*{userId}" readonly="readonly">
 								</div>
 							</td>
@@ -47,7 +47,7 @@
 						</tr>
 					</table>
 					
-					<!--<table class="table table-bordered table-hover table-striped">
+					<table class="table table-bordered table-hover table-striped">
 			        <tr>
 			        	<th class="info col-sm-2">勤怠年月日</th>
 			            <th class="info col-sm-2">勤怠情報</th>
@@ -55,7 +55,7 @@
 			            <th class="info col-sm-2">退勤時間</th>
 			        </tr>
 			        <tr th:each="select : ${userDetailSelect}"> 
-			        	<td th:text="${#dates.format(select.attendanceDate, 'yyyy/MM/dd')}"></td>
+			        	<td th:text="${#dates.format(select.attendanceDate, 'yyyy-MM-dd')}"></td>
 			            <td th:text="${select.punch} ? '出勤' : '退勤'"></td>
 			            <td th:text="${#dates.format(select.startTime, 'HH:mm')}"></td> 
 			            <td th:text="${#dates.format(select.endTime, 'HH:mm')}"></td>
@@ -67,11 +67,11 @@
                     		<span th:text="${error.message}">Error message</span>
                 		</li>
 					</ul>
-					
 						<input type="date" th:field="*{date}">
-						
-					
-					<button class="btn btn-primary" type="submit" name="dates">検索</button>-->
+					<button class="btn btn-primary" type="submit" name="dates">検索</button>
+					<!-- ユーザー一覧の件数 -->
+			<!--<label th:text="'合計 ： ' + ${userDetailCount} + '件'"></label><br>-->
+					<label class="text-info" th:text="${result}">結果表示</label>
 					<!-- 更新ボタン -->
 					<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">更新</button>
 					<!-- 削除ボタン -->

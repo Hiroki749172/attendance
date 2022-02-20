@@ -1,13 +1,13 @@
 package com.example.demo.login.domain.model;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -19,12 +19,14 @@ public class Update {
 	
 	private Integer ipAddress;
 	private Time loginTime;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date date;
+	
 	private int punch;
 	private Date attendanceDate;
 	private Time startTime;
 	private Time endTime;
-	private LocalDateTime nowDate = LocalDateTime.now();
 	
 	//groups属性にインターフェースのクラスを指定することで、フィールドとグループの紐づけができます
 	@NotBlank(groups=ValidationGroup1.class)

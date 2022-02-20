@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.login.domain.model.ChengePassword;
+import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
@@ -71,9 +72,10 @@ public class UserService {
 		return dao.selectMany();
 	}
 	
-	public List<User> selectManyYear(Date date) {
+	public List<SignupForm> selectManyYear(Date date, String userId) {
+		
 		//全件取得
-		return dao.selectManyYear(date);
+		return dao.selectManyYear(date, userId);
 	}
 	
 	//1件取得メソッド
@@ -143,8 +145,8 @@ public class UserService {
 		return dao.selectHome(userId);
 	}
 
-	public int count4() {
-		return dao.count4();
+	public int countAttenDance() {
+		return dao.countAttenDance();
 	}
 
 	public User selectPass(String password) {
