@@ -17,6 +17,8 @@ public interface UserDao {
 	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
 	public User selectHome(String userId) throws DataAccessException;
 	
+	public User selectPunch(String userId) throws DataAccessException;
+	
 	//user_masterテーブルの件数を取得
 	public int count() throws DataAccessException;
 	
@@ -60,7 +62,7 @@ public interface UserDao {
 	public List<User> selectManyFor() throws DataAccessException;
 	
 	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException;
-
+	public List<User> selectList(Date date) throws DataAccessException;
 }
 
 /*リポジトリクラスのインターフェースを作る。

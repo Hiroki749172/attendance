@@ -4,6 +4,8 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 //@DataでLombokでgetterやsetterを自動で作る
@@ -22,7 +24,10 @@ public class User {
 	
 	private int punch;
 	private Date attendanceDate;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date date;
+	
 	private Time startTime;
 	private Time endTime;
 	private LocalDateTime nowDate = LocalDateTime.now();

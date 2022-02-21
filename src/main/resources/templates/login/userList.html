@@ -39,6 +39,20 @@
 					</td>
 				</tr>
 			</table>
+			<table class="table table-bordered table-hover table-striped">
+			        <tr>
+			        	<th class="info col-sm-2">勤怠年月日</th>
+			            <th class="info col-sm-2">勤怠情報</th>
+			            <th class="info col-sm-2">出勤時間</th>
+			            <th class="info col-sm-2">退勤時間</th>
+			        </tr>
+			        <tr th:each="select : ${userListSelect}"> 
+			        	<td th:text="${#dates.format(select.attendanceDate, 'yyyy-MM-dd')}"></td>
+			            <td th:text="${select.punch} ? '出勤' : '退勤'"></td>
+			            <td th:text="${#dates.format(select.startTime, 'HH:mm')}"></td> 
+			            <td th:text="${#dates.format(select.endTime, 'HH:mm')}"></td>
+			        </tr> 
+			    </table>
 			<!-- ユーザー一覧の件数 -->
 			<label th:text="'合計 ： ' + ${userListCount} + '件'"></label><br>
 			<!-- 更新・削除処理の結果表示用 -->
@@ -46,7 +60,7 @@
 			
 			<!-- CSV出力 -->
 			<a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
-			<!--<input type="date" name="date" th:field="*{update.yearmonth}">-->
+			<input type="date" name="calendar">
 			<button class="btn btn-primary" type="submit" name="selectDate">検索</button>
  		</form> 
 	</div>

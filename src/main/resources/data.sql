@@ -9,4 +9,4 @@ INSERT INTO attendance_information (user_id, punch, attendance_date, start_time,
 VALUES ('yamada@xxx.co.jp', 1, '2022-02-20', '12:00', '20:00');
 
 INSERT INTO attendance_information (user_id, punch, attendance_date, start_time, end_time)
-VALUES ('tamura@xxx.co.jp', 0, '2022-02-20', '22:00', '12:00');
+VALUES ('tamura@xxx.co.jp', 0, '2022-02-10', '22:00', '12:00');

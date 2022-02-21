@@ -328,18 +328,44 @@ public class UserDaoJdbcImpl implements UserDao {
 				"SELECT punch, attendance_date, start_time, end_time FROM"
 						+ " attendance_information"
 						+ " WHERE attendance_date = ? AND user_id = ?", date, userId);
-				List<SignupForm> userList = new ArrayList<>();
-				for(Map<String, Object> map : getList) {
-					SignupForm form = new SignupForm();
-					form.setPunch((int) map.get("punch"));
-					form.setAttendanceDate((Date) map.get("attendance_date"));
-					form.setStartTime((Time) map.get("start_Time"));
-					form.setEndTime((Time)map.get("end_time"));
-					userList.add(form);
-				}
+			List<SignupForm> userList = new ArrayList<>();
+			for(Map<String, Object> map : getList) {
+				SignupForm form = new SignupForm();
+				form.setPunch((int) map.get("punch"));
+				form.setAttendanceDate((Date) map.get("attendance_date"));
+				form.setStartTime((Time) map.get("start_Time"));
+				form.setEndTime((Time)map.get("end_time"));
+				userList.add(form);
+		}
 		return userList;
 	}
-	
+
+	@Override
+	public List<User> selectList(Date date) throws DataAccessException {
+		List<Map<String, Object>> postList = jdbc.queryForList(
+				"SELECT punch, attendance_date, start_time, end_time FROM"
+						+ " attendance_information"
+						+ " WHERE attendance_date = ?", date);
+			List<User> userList = new ArrayList<>();
+			for(Map<String, Object> map : postList) {
+				User user = new User();
+				user.setPunch((int) map.get("punch"));
+				user.setAttendanceDate((Date) map.get("attendance_date"));
+				user.setStartTime((Time) map.get("start_time"));
+				user.setEndTime((Time) map.get("end_time"));
+				userList.add(user);
+		}
+		return userList;
+	}
+
+	@Override
+	public User selectPunch(String userId) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap(
+				"SELECT punch FROM attendance_information WHERE user_id = ?", userId);
+		User user = new User();
+		user.setPunch((int) map.get("punch"));
+		return user;
+	}
 }
 
 //UserDaoインターフェースを実装したクラス

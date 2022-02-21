@@ -47,6 +47,11 @@ public class UserService {
 		return result;
 	}
 	
+	public User selectPunch(String userId) {
+		//selectOne実行
+		return dao.selectPunch(userId);
+	}
+	
 	public boolean insertFor(User user) {
 		//insert実行
 				int rowNumber = dao.insertFor(user);
@@ -148,7 +153,11 @@ public class UserService {
 	public int countAttenDance() {
 		return dao.countAttenDance();
 	}
-
+	
+	public List<User> selectList(Date date){
+		return dao.selectList(date);
+	}
+	
 	public User selectPass(String password) {
 		return dao.selectPass(password);
 	}

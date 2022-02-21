@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>ホーム</title>
 </head>
+
 <body>
 	<!-- th:fragmentが付いているタグ内のHTMLが先程のテンプレート用のHTML内に追加される -->
 	<div th:fragment="home_contents">
@@ -23,12 +24,12 @@
 	 		        	<td th:text="${home.userName}"></td> 
 			            <td th:text="${home.punch} ? '出勤' : '退勤'"></td>
 			            <td th:text="${#dates.format(home.startTime, 'HH:mm')}"></td> 
-			            <td th:text="${#dates.format(home.endTime, 'HH:mm')}"></td>
+			            <td th:text="${#dates.format(home.endTime, 'HH:mm')}"></td>	        
 			        </tr> 
 			    </table>
 			
-		    <button class="btn btn-primary" type="submit" name="updateStart">出勤</button>
-		    <button class="btn btn-primary" type="submit" name="updateEnd">退勤</button>
+		    <button class="btn btn-primary" type="submit" th:if="${punchStart}" name="updateStart">出勤</button>
+		    <button class="btn btn-primary" type="submit" th:if="${punchEnd}" name="updateEnd">退勤</button>
 		    <label class="text-info" th:text="${result}">結果表示</label>
 			</form>
 	</div>
