@@ -52,6 +52,11 @@ public class UserService {
 		return dao.selectPunch(userId);
 	}
 	
+	public List<User> postList(Date date) {
+		//selectOne実行
+		return dao.postList(date);
+	}
+	
 	public boolean insertFor(User user) {
 		//insert実行
 				int rowNumber = dao.insertFor(user);

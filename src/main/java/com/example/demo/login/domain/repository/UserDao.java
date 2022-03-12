@@ -19,6 +19,8 @@ public interface UserDao {
 	
 	public User selectPunch(String userId) throws DataAccessException;
 	
+	public List<User> postList(Date date) throws DataAccessException;
+	
 	//user_masterテーブルの件数を取得
 	public int count() throws DataAccessException;
 	

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- コンテンツ部分 -->
+	<div th:fragment="userDate_contents">
+		<div class="page-header">
+			<h1>社員管理</h1>
+		</div>
+ 		<form method="post" th:action="@{/userDate}">
+			<table class="table table-bordered table-hover table-striped">
+				<tr>
+					<th class="info col-sm-2">ID</th>
+					<th class="info col-sm-2">氏名</th>
+					<th class="info col-sm-2">管理者区分</th>
+					<th class="info col-sm-2">出退勤区分</th>
+					<th class="info col-sm-2">年月日</th>
+					<th class="info col-sm-2">出勤時間</th>
+					<th class="info col-sm-2">退勤時間</th>
+				</tr>
+				<tr th:each="user : ${userListSelect}">
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.userName}"></td>
+					<td th:text="${user.master} ? '管理者' : '非管理者'"></td>
+					<!-- 日付型のフォーマット -->
+					<td th:text="${user.punch} ? '出勤' : '退勤'"></td>
+					<td th:text="${#dates.format(user.attendanceDate, 'YYYY/MM/dd')}" ></td>
+					<td th:text="${#dates.format(user.startTime, 'HH:mm')}" ></td>
+					<td th:text="${#dates.format(user.endTime, 'HH:mm')}" ></td>
+					<!-- 動的URL この後でユーザー1件取得して表示する機能を追加します。
+					その際に検索するためのユーザーIDをコントローラークラスに渡す必要がある。th:hrefの値の中にユーザーIDを含むようにしている -->
+				</tr>
+	
+			<!-- ユーザー一覧の件数 -->
+			<label th:text="'合計 ： ' + ${userListCount} + '件'"></label><br>
+			<!-- 更新・削除処理の結果表示用 -->
+			<label class="text-info" th:text="${result}">結果表示</label>
+			
+			<!-- CSV出力 -->
+			<a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
+ 		</form> 
+	</div>
+</body>
+</html>
