@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.login.domain.model.User;
@@ -45,18 +46,20 @@ public class UserDateController {
 	
 	@GetMapping(value="/userDate")
 	public String getUserDate(Model model) {
-//		//コンテンツ部分にユーザー一覧画面を表示するための文字列を登録
+		//コンテンツ部分にユーザー一覧画面を表示するための文字列を登録
 		model.addAttribute("contents", "login/userDate :: userDate_contents");
-//		, params="selectDate" @RequestParam("calendar") String dates, 
-//		radioMaster = initRadioMaster();
-//		model.addAttribute("radioMaster", radioMaster);
-//		
-//		radioPunch = initRadioPunch();
-//		model.addAttribute("radioPunch", radioPunch);
-//		System.out.println("社員一覧検索処理");
-//		
-//		
-		String dates = "2022-03-10";
+		radioMaster = initRadioMaster();
+		model.addAttribute("radioMaster", radioMaster);
+		
+		radioPunch = initRadioPunch();
+		model.addAttribute("radioPunch", radioPunch);
+
+		return "login/homeLayout";
+	}
+	@PostMapping(value="/userDate", params="selectDate")
+	public String postUserDate(@RequestParam("calendar") String dates, Model model) {
+		System.out.println("社員一覧検索処理");
+		
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Date newDate = dateFormat.parse(dates);
@@ -67,7 +70,7 @@ public class UserDateController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return "login/homeLayout";
+		return getUserDate(model);
+		
 	}
-
 }
