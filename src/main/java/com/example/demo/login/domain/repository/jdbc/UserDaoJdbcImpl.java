@@ -330,12 +330,12 @@ public class UserDaoJdbcImpl implements UserDao {
 						+ " WHERE attendance_date = ? AND user_id = ?", date, userId);
 			List<SignupForm> userList = new ArrayList<>();
 			for(Map<String, Object> map : getList) {
-				SignupForm form = new SignupForm();
-				form.setPunch((int) map.get("punch"));
-				form.setAttendanceDate((Date) map.get("attendance_date"));
-				form.setStartTime((Time) map.get("start_Time"));
-				form.setEndTime((Time)map.get("end_time"));
-				userList.add(form);
+//				SignupForm form = new SignupForm();
+//				form.setPunch((int) map.get("punch"));
+//				form.setAttendanceDate((Date) map.get("attendance_date"));
+//				form.setStartTime((Time) map.get("start_Time"));
+//				form.setEndTime((Time)map.get("end_time"));
+//				userList.add(form);
 		}
 		return userList;
 	}
