@@ -1,7 +1,5 @@
 package com.example.demo.login.domain.model;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -24,6 +22,6 @@ public class SignupForm {
 	
 	private int master; //管理者、非管理者
 	
-	private Date yearmonth;
+//	private Date yearmonth;
 }
 	

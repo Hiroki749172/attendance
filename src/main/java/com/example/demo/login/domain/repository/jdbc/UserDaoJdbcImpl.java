@@ -19,7 +19,7 @@ import com.example.demo.login.domain.repository.UserDao;
 
 @Repository("UserDaoJdbcImpl")
 public class UserDaoJdbcImpl implements UserDao {
-	//JdbcTemplateはBean定義されているため@Autowiredで使えるようになる
+
 	@Autowired
 	JdbcTemplate jdbc;
 	
@@ -29,9 +29,6 @@ public class UserDaoJdbcImpl implements UserDao {
 	//user_masterテーブルの件数を取得
 	@Override
 	public int count() throws DataAccessException {
-		/*Objectの取得
-		 * カウントの結果やカラムを1つだけ取得してくるような場合にはqueryForObjectメソッドを使う
-		 * 第1引数にSQL文、第2引数に戻り値のオブジェクトのclassを指定*/
 		//全件取得してカウント
 		int count = jdbc.queryForObject("SELECT COUNT(*) FROM user_master", Integer.class);
 		return count;
@@ -44,11 +41,6 @@ public class UserDaoJdbcImpl implements UserDao {
 		//パスワード暗号化
 		String password = passwordEncoder.encode(user.getPassword());
 		
-		/*JdbcTemplateクラスを使って登録（insert）するにはupdateメソッドを使う
-		 * 第1引数にSQL、第2引数以降にはPreparedStatementを使う。
-		 * PreparedStatementには、SQL文の？の部分に入れる変数を引数にセットしていく。セットした順番にSQL文に代入
-		 * updateメソッドの戻り値には、登録したレコード数が返ってくる
-		 * */
 		//1件登録
 		String sql = "INSERT INTO user_master("
 				+ " user_id,"
@@ -88,6 +80,7 @@ public class UserDaoJdbcImpl implements UserDao {
 		user.setMaster((int) map.get("master"));
 		return user;
 	}
+	
 	//user_masterテーブルのパスワードを1件取得
 	@Override
 	public User selectPass(String password) throws DataAccessException {
@@ -99,16 +92,9 @@ public class UserDaoJdbcImpl implements UserDao {
 		return user;
 	}
 	
-	
-	
 	//user_masterテーブルの全データを取得
 	@Override
 	public List<User> selectMany() throws DataAccessException {
-		/*複数件のSELECT
-		 * queryForListメソッドを使う。戻り値の型にはList<Map<String, Object>>を指定する
-		 * Listが行を指し、Mapが列。Mapのgetメソッドでテーブルのカラム名を指定することで値を取得できます
-		 * このソースでは拡張forでList<Map<String, Object>>をList<User>に変換
-		 * */
 		//user_masterテーブルのデータを全件取得
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM user_master");
 		
@@ -149,18 +135,9 @@ public class UserDaoJdbcImpl implements UserDao {
 		int rowNumber = jdbc.update(sql, user.getUserId());
 		return rowNumber;
 	}
-	@Override
-	public int updateStart(String userId) throws DataAccessException{
-		int rowNumber = jdbc.update("UPDATE attendance_information SET punch = 1, start_time = CURRENT_TIME() WHERE user_id = ?", userId);
-		return rowNumber;
-	}
 	
-	@Override
-	public int updateEnd(String userId) throws DataAccessException{
-		String sql = "UPDATE attendance_information SET punch = 0, end_time = CURRENT_TIME() WHERE user_id = ?";
-		int rowNumber = jdbc.update(sql, userId);
-		return rowNumber;
-	}
+	
+	
 	//user_masterテーブルを1件更新
 	@Override
 	public int updateOne(User user) throws DataAccessException {
@@ -231,9 +208,6 @@ public class UserDaoJdbcImpl implements UserDao {
 //				, user.getLoginTime());
 		return rowNumber;
 	}
-
-	//admin_historyテーブルにデータを1件insert
-	
 	
 	//attendance_informationテーブルの件数を取得
 	@Override
@@ -243,8 +217,6 @@ public class UserDaoJdbcImpl implements UserDao {
 		return count4;
 	}
 
-	
-	
 	//attendance_informationテーブルにデータを1件insert
 	@Override
 	public int insertFor(User user) throws DataAccessException {
@@ -262,8 +234,6 @@ public class UserDaoJdbcImpl implements UserDao {
 		return rowNumber;
 	}
 	
-	
-	
 	//attendance_informationテーブルのデータを１件取得
 	@Override
 	public User selectFor(String userId) throws DataAccessException {
@@ -276,27 +246,26 @@ public class UserDaoJdbcImpl implements UserDao {
 		user.setAttendanceDate((Date) map.get("attendance_date"));
 		user.setStartTime((Time) map.get("start_time"));
 		user.setEndTime((Time) map.get("end_time"));
-		
+//		punch(userId);
 		return user;
 	}
+	
+	
 
-	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
-		@Override
-		public User selectHome(String userId) throws DataAccessException{
-			Map<String, Object> map = jdbc.queryForMap(
-					"SELECT *"
-					+ " FROM user_master INNER JOIN attendance_information ON user_master.user_id = attendance_information.user_id"
-					+ " WHERE user_master.user_id = ?", userId);
-			User user = new User();
-			user.setUserId((String) map.get("user_id"));
-			user.setUserName((String) map.get("user_name"));
-			user.setPunch((int) map.get("punch"));
-			user.setAttendanceDate((Date) map.get("attendance_date"));
-			user.setStartTime((Time) map.get("start_time"));
-			user.setEndTime((Time) map.get("end_time"));
-			System.out.println(user);
-			return user;
+	@Override
+	public User endTime(String userId) {
+		User user = new User();
+		if (user.getPunch() == 1) {
+			
 		}
+		return null;
+	}
+	
+//	public User startWork(String userId) {
+//		String sql = "UPDATE "
+//	}
+	
+	
 	//attendance_informationテーブルの全データを取得
 	@Override
 	public List<User> selectManyFor() throws DataAccessException {
@@ -322,23 +291,23 @@ public class UserDaoJdbcImpl implements UserDao {
 		return userList;
 	}
 
-	@Override
-	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException {
-		List<Map<String, Object>> getList = jdbc.queryForList(
-				"SELECT punch, attendance_date, start_time, end_time FROM"
-						+ " attendance_information"
-						+ " WHERE attendance_date = ? AND user_id = ?", date, userId);
-			List<SignupForm> userList = new ArrayList<>();
-			for(Map<String, Object> map : getList) {
-//				SignupForm form = new SignupForm();
-//				form.setPunch((int) map.get("punch"));
-//				form.setAttendanceDate((Date) map.get("attendance_date"));
-//				form.setStartTime((Time) map.get("start_Time"));
-//				form.setEndTime((Time)map.get("end_time"));
-//				userList.add(form);
-		}
-		return userList;
-	}
+//	@Override
+//	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException {
+//		List<Map<String, Object>> getList = jdbc.queryForList(
+//				"SELECT punch, attendance_date, start_time, end_time FROM"
+//						+ " attendance_information"
+//						+ " WHERE attendance_date = ? AND user_id = ?", date, userId);
+//			List<SignupForm> userList = new ArrayList<>();
+//			for(Map<String, Object> map : getList) {
+////				SignupForm form = new SignupForm();
+////				form.setPunch((int) map.get("punch"));
+////				form.setAttendanceDate((Date) map.get("attendance_date"));
+////				form.setStartTime((Time) map.get("start_Time"));
+////				form.setEndTime((Time)map.get("end_time"));
+////				userList.add(form);
+//		}
+//		return userList;
+//	}
 
 	@Override
 	public List<User> selectList(Date date) throws DataAccessException {
@@ -387,6 +356,10 @@ public class UserDaoJdbcImpl implements UserDao {
 				}
 				return userList;
 	}
-}
 
-//UserDaoインターフェースを実装したクラス
+	@Override
+	public List<SignupForm> selectManyYear(Date date, String userId) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+}

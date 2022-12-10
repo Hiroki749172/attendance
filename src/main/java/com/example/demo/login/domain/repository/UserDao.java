@@ -11,11 +11,11 @@ import com.example.demo.login.domain.model.User;
 
 public interface UserDao {
 	//DataAccessExceptionとはSpringではDB操作で例外が発生した場合、Springが提供しているDataAccessExceptionを投げる
-	public int updateStart(String userId) throws DataAccessException;
-	public int updateEnd(String userId) throws DataAccessException;
+
 	public int updatePass(ChengePassword chenge, String userId) throws DataAccessException;
-	//勤怠画面に表示（氏名、勤怠区分、勤怠情報時間）するための取得処理
-	public User selectHome(String userId) throws DataAccessException;
+	
+	
+	public User endTime(String userId) throws DataAccessException;
 	
 	public User selectPunch(String userId) throws DataAccessException;
 	

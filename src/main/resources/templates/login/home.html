@@ -20,17 +20,17 @@
 			            <th class="info col-sm-2">出勤時間</th>
 			            <th class="info col-sm-2">退勤時間</th>
 			        </tr>
-	 		        <tr th:each="home : ${userHome}"> 
-	 		        	<td th:text="${home.userName}"></td> 
-			            <td th:text="${home.punch} ? '出勤' : '退勤'"></td>
-			            <td th:text="${#dates.format(home.startTime, 'HH:mm')}"></td> 
-			            <td th:text="${#dates.format(home.endTime, 'HH:mm')}"></td>	        
+	 		        <tr th:each="user : ${userHome}"> 
+	 		        	<td th:text="${user.userName}"></td> 
+			            <td th:text="${user.punch} ? '出勤' : '退勤'"></td>
+			            <td th:text="${#dates.format(user.startTime, 'HH:mm')}"></td> 
+			            <td th:text="${#dates.format(user.endTime, 'HH:mm')}"></td>	        
 			        </tr> 
 			    </table>
 			
-		    <button class="btn btn-primary" type="submit" th:if="${punchStart}" name="updateStart">出勤</button>
-		    <button class="btn btn-primary" type="submit" th:if="${punchEnd}" name="updateEnd">退勤</button>
-		    <label class="text-info" th:text="${result}">結果表示</label>
+		    <button class="btn btn-primary" type="submit" th:unless="${userHome.punch}" name="workStart">出勤</button>
+		    <button class="btn btn-primary" type="submit" th:if="${userHome.punch}" name="workEnd">退勤</button>
+		    <label class="text-info" th:text="${work}">結果表示</label>
 			</form>
 	</div>
 

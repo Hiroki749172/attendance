@@ -36,7 +36,7 @@ public class LoginController {
 	}
 	
 	@GetMapping("/adminlogin")
-	public String getAdmin(Model model) {
+	public String getAdminLogin(Model model) {
 		return "login/adminlogin";
 	}
 	
@@ -51,8 +51,19 @@ public class LoginController {
 	public String postAdmin(Model model) {
 		return "redirect:/home";
 	}
+	
+	//ログアウト用メソッド
+	@PostMapping("/logout")
+	public String postLogout() {
+		//ログイン画面にリダイレクト
+		return "redirect:/login";
+	}
+	
+	//管理者権限専用画面のGET用メソッド
+	@GetMapping("/admin")
+	public String getAdmin(Model model) {
+		//コンテンツ部分に社員編集を表示する為の文字列を登録
+		model.addAttribute("contents", "login/admin :: admin_contents");
+		return "login/homeLayout";
+	}
 }
-
-
-
-//localhost:8080/loginにGETメソッド、POSTメソッドでHTTPリクエストが来たら、login配下のlogin.htmlに遷移する

@@ -151,9 +151,7 @@ public class UserService {
 		return dao.selectFor(userId);
 	}
 	
-	public User selectHome(String userId) {
-		return dao.selectHome(userId);
-	}
+
 
 	public int countAttenDance() {
 		return dao.countAttenDance();
@@ -189,32 +187,4 @@ public class UserService {
 		return result;
 	}
 	
-	public boolean updateStart(String userId) {
-		//1件更新
-		int rowNumber = dao.updateStart(userId);
-		
-		//判定用定数
-		boolean result = false;
-		if(rowNumber > 0) { //0より大きい値が返ってきたらupdate成功
-			//update成功
-			result = true;
-		}
-		return result;
-	}
-	public boolean updateEnd(String userId) {
-		//1件更新
-		int rowNumber = dao.updateEnd(userId);
-		
-		//判定用定数
-		boolean result = false;
-		if(rowNumber > 0) { //0より大きい値が返ってきたらupdate成功
-			//update成功
-			result = true;
-		}
-		return result;
-	}
-	
-	
 }
-
-//サービス用のクラスを作成

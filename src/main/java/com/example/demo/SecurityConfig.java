@@ -65,10 +65,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll() //ログインページは直リンクOK
                 .antMatchers("/signup").permitAll() //ユーザー登録画面は直リンクOK
                 .antMatchers("/adminlogin").permitAll() 
+                .antMatchers("/h2-console//**").permitAll()
                 .antMatchers("/rest/**").permitAll()
                 .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/userList").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated(); //それ以外は直リンク禁止
+        http.csrf().ignoringAntMatchers("/h2-console/**");
+        http.headers().frameOptions().disable();
 
         //ログイン処理
         http
