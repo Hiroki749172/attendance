@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.login.domain.model.User;
-import com.example.demo.login.domain.service.UserService;
+import com.example.demo.login.domain.service.UserDateService;
 
 @Controller
 public class UserDateController {
 	
 	@Autowired
-	UserService userService;
+	UserDateService userDateService;
 	
 	//管理者区分のラジオボタン用の変数
 	private Map<String, Integer> radioMaster;
@@ -65,7 +65,7 @@ public class UserDateController {
 			Date newDate = dateFormat.parse(dates);
 			Date date = newDate;
 			System.out.println(newDate);
-			List<User> dateList = userService.postList(date);
+			List<User> dateList = userDateService.postList(date);
 			model.addAttribute("userListSelect", dateList);
 		} catch (ParseException e) {
 			e.printStackTrace();

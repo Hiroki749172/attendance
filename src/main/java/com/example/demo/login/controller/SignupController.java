@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.demo.login.domain.model.GroupOrder;
 import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
-import com.example.demo.login.domain.service.UserService;
+import com.example.demo.login.domain.service.SignupService;
 
 @Controller
 public class SignupController {
 	
 	@Autowired
-	private UserService userService;
+	private SignupService signupService;
 
 	//管理者区分のラジオボタン用の変数
 		private Map<String, Integer> radioMaster;
@@ -60,7 +60,8 @@ public class SignupController {
 	//データバインド結果を受け取るためにはBindingResultを追加。
 	//バリデーションを行う場合は@Validated。パラメータに実行順序のインターフェースを指定
 	@PostMapping("/signup")
-	public String postSignUp(@ModelAttribute @Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Model model) {
+	public String postSignUp(@ModelAttribute @Validated(GroupOrder.class) SignupForm form, 
+			BindingResult bindingResult, Model model) {
 		
 		//データバインド失敗の場合,入力チェックに引っかかった場合、社員登録画面に戻る。.hasErrors()で失敗しているか確認
 		if (bindingResult.hasErrors()) {
@@ -80,8 +81,8 @@ public class SignupController {
 		user.setMaster(form.getMaster());
 		
 		//ユーザー登録処理
-		boolean result = userService.insertOne(user);
-		boolean infor = userService.insertFor(user);
+		boolean result = signupService.insertOne(user);
+		boolean infor = signupService.insertFor(user);
 		model.addAttribute("infor", infor);
 		
 		//ユーザー登録結果の判定

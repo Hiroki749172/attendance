@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.login.domain.model.User;
-import com.example.demo.login.domain.service.UserService;
+import com.example.demo.login.domain.service.LoginService;
 
 @Controller
 public class LoginController {
 	
 	@Autowired
-	UserService userService;
+	LoginService loginService;
 	
 	//ログイン画面のGET用コントローラー
 	@GetMapping("/login")
@@ -23,7 +23,7 @@ public class LoginController {
 		User user = new User();
 		
 		try {
-			boolean result = userService.insertUser(user);
+			boolean result = loginService.insertUser(user);
 			if(result == true) {
 				model.addAttribute("result", "挿入成功");
 			} else {

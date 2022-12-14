@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
-import com.example.demo.login.domain.service.UserService;
+import com.example.demo.login.domain.service.UserDetailService;
 
 @Controller
 public class UserDetailController {
 
 	@Autowired
-	UserService userService;
+	UserDetailService userDetailService;
 	
 	//管理者区分のラジオボタン用の変数
 	private Map<String, Integer> radioMaster;
@@ -67,7 +67,7 @@ public class UserDetailController {
 		if(userId != null && userId.length() > 0) {
 			
 			//ユーザー情報を取得
-			User user = userService.selectOne(userId);
+			User user = userDetailService.selectOne(userId);
 
 			//Userクラスをフォームクラスに変換
 			form.setUserId(user.getUserId());
@@ -87,7 +87,7 @@ public class UserDetailController {
 		System.out.println("削除ボタンの処理");
 		
 		//削除実行
-		boolean result = userService.deleteOne(form.getUserId());
+		boolean result = userDetailService.deleteOne(form.getUserId());
 		
 		if(result == true) {
 			model.addAttribute("result", "削除成功");
@@ -115,7 +115,7 @@ public class UserDetailController {
 		
 		try {
 			//更新実行
-			boolean result = userService.updateOne(user);
+			boolean result = userDetailService.updateOne(user);
 			
 			if(result == true ) {
 				model.addAttribute("result", "更新成功");
@@ -143,13 +143,13 @@ public class UserDetailController {
 		model.addAttribute("radioPunch", radioPunch);
 		
 		//社員管理画面の生成（Modelから値を取得して表示するためです）
-		List<User> userList = userService.selectManyFor();
+		List<User> userList = userDetailService.selectManyFor();
 		
 		//Modelにユーザーリストを登録(複数検索結果)
 		model.addAttribute("userList", userList);
 		
 		//データ件数を取得（カウント結果）
-		int count = userService.count();
+		int count = userDetailService.count();
 		model.addAttribute("userListCount", count);
 		
 		return "login/homeLayout";
@@ -159,13 +159,13 @@ public class UserDetailController {
 	@GetMapping("/userList/csv")
 	public ResponseEntity<byte[]> getUserListCsv(Model model) {
 		//社員を全件取得して、CSVをサーバーに保存する
-		userService.userCsvOut();
+		userDetailService.userCsvOut();
 		
 		byte[] bytes = null;
 		
 		try {
 			//サーバーに保存されているsample.csvファイルをbyteで取得する
-			bytes = userService.getFile("sample.csv");
+			bytes = userDetailService.getFile("sample.csv");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
